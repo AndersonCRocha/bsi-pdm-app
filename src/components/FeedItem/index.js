@@ -18,13 +18,17 @@ import {
 
 import avatar from '../../assets/images/avatar.jpeg'
 import produto from '../../assets/images/produto.jpeg'
+import { useNavigation } from 'react-navigation-hooks'
 
 const FeedItem = ({ item }) => {
+  const navigation = useNavigation()
   const price = `R$ ${formatCurrency(item.product.price)}`
 
   return (
     <FeedItemWrapper>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Detail', { itemId: item._id })}
+      >
         <Card>
           <CardImage source={produto} />
           <CardContent>

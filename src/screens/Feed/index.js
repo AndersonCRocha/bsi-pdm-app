@@ -53,7 +53,7 @@ const Feed = () => {
   }
 
   const renderFooter = () =>
-    isLoading ? (
+    isLoading && staticFeed.length !== feed.length ? (
       <Loading>
         <ActivityIndicator color="black" />
       </Loading>
@@ -64,7 +64,7 @@ const Feed = () => {
   return (
     <FlatList
       data={feed}
-      numColumns={1}
+      numColumns={2}
       onEndReached={loadFeed}
       onEndReachedThreshold={0.1}
       onRefresh={refresh}

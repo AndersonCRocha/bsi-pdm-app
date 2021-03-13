@@ -1,4 +1,4 @@
-export const PER_PAGE = 1
+export const PER_PAGE = 2
 
 export const formatCurrency = number => number.toFixed(2)
 

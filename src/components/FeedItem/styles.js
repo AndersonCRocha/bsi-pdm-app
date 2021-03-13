@@ -1,8 +1,8 @@
 import styled from 'styled-components/native'
 
 export const FeedItemWrapper = styled.View`
-  /* width: 100%;
-  flex: 1; */
+  width: 50%;
+  flex: 1;
 `
 
 export const CompanyWrapper = styled.View`

@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Card, CardContent, CardImage } from 'react-native-cards'
 import Icon from 'react-native-vector-icons/AntDesign'
-import { formatCurrency } from '../../utils/utils'
+import { cutText, formatCurrency } from '../../utils/utils'
 
 import {
   Avatar,
@@ -28,17 +28,20 @@ const FeedItem = ({ item }) => {
     <FeedItemWrapper>
       <TouchableOpacity
         onPress={() => navigation.navigate('Detail', { itemId: item._id })}
+        style={{ flex: 1 }}
       >
         <Card>
-          <CardImage source={produto} />
-          <CardContent>
+          <CardImage source={produto} style={{ maxHeight: 100 }} />
+          <CardContent flex={1}>
             <CompanyWrapper>
               <Avatar source={avatar} />
               <Text>{item.company.name}</Text>
             </CompanyWrapper>
 
             <ItemName>{item.product.name}</ItemName>
-            <ItemDescription>{item.product.description}</ItemDescription>
+            <ItemDescription>
+              {cutText(item.product.description, 100)}
+            </ItemDescription>
 
             <ContentFooter>
               <ItemPrice>{price}</ItemPrice>

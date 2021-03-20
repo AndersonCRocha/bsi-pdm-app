@@ -6,20 +6,33 @@ import { createStackNavigator } from 'react-navigation-stack'
 
 import Feed from './src/screens/Feed'
 import Detail from './src/screens/Detail'
+import { ThemeProvider } from 'styled-components'
 
-const Navigator = createStackNavigator({
-  Feed: { screen: Feed },
-  Detail: { screen: Detail },
-})
+const Navigator = createStackNavigator(
+  {
+    Feed: { screen: Feed },
+    Detail: { screen: Detail },
+  },
+  {
+    headerMode: 'none',
+  }
+)
 
 const Container = createAppContainer(Navigator)
 
+const defaultTheme = {
+  primaryColor: '#FD800F',
+  secondaryColor: '#FAB276',
+}
+
 const App = () => {
   return (
-    <MenuProvider>
-      <StatusBar barStyle="dark-content" />
-      <Container />
-    </MenuProvider>
+    <ThemeProvider theme={defaultTheme}>
+      <MenuProvider>
+        <StatusBar barStyle="dark-content" />
+        <Container />
+      </MenuProvider>
+    </ThemeProvider>
   )
 }
 

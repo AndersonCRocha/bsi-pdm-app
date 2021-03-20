@@ -2,6 +2,7 @@ import styled from 'styled-components/native'
 
 export const FeedItemWrapper = styled.View`
   width: 50%;
+  max-width: 50%;
   flex: 1;
 `
 
@@ -18,11 +19,12 @@ export const Avatar = styled.Image`
 `
 
 export const ItemName = styled.Text`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
 `
 
 export const ItemDescription = styled.Text`
+  font-size: 12px;
   margin-bottom: 8px;
 `
 

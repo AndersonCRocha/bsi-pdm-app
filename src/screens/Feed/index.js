@@ -1,15 +1,15 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator } from 'react-native'
+import { Header } from 'react-native-elements'
 import { FlatList } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/AntDesign'
-import { Header } from 'react-native-elements'
-import FeedItem from '../../components/FeedItem'
+import { ThemeContext } from 'styled-components'
 import staticFeed from '../../assets/data/feed.json'
+import EmptyResult from '../../components/EmptyResult'
+import FeedItem from '../../components/FeedItem'
+import SearchBar from '../../components/SearchBar'
 import { PER_PAGE, sleep } from '../../utils/utils'
 import { Loading } from './styles'
-import SearchBar from '../../components/SearchBar'
-import EmptyResult from '../../components/EmptyResult'
-import { ThemeContext } from 'styled-components'
 
 const INITIAL_PAGE = 0
 
@@ -28,7 +28,7 @@ const Feed = () => {
     return () => setFeed([])
   }, [])
 
-  const fetchFeed = async () => {
+  const fetchFeed = async _page => {
     await sleep(500)
     if (inputSearchValue) {
       setIsFilteredResults(true)
@@ -38,44 +38,47 @@ const Feed = () => {
     }
 
     setIsFilteredResults(false)
-    const firstItem = page * PER_PAGE
+    const firstItem = _page * PER_PAGE
     return staticFeed.filter(
       (_, index) => index >= firstItem && index < firstItem + PER_PAGE
     )
   }
 
-  const loadFeed = useCallback(() => {
-    // eslint-disable-next-line prettier/prettier
-    ; (async () => {
-      if (isLoading) return
-      setIsloading(true)
+  const loadFeed = async _isRefreshing => {
+    if (
+      isLoading ||
+      (isFilteredResults && !_isRefreshing) ||
+      (feed.length === staticFeed.length && !_isRefreshing)
+    ) {
+      return
+    }
+    setIsloading(true)
 
-      const actualFeed = await fetchFeed()
+    if (_isRefreshing) {
+      setFeed([])
+      const actualFeed = await fetchFeed(INITIAL_PAGE)
 
-      setPage(page + 1)
-      setFeed([...feed, ...actualFeed])
-      setIsloading(false)
-      setIsRefreshing(false)
-    })()
-  }, [page, feed, isLoading])
+      setPage(INITIAL_PAGE + 1)
+      setFeed([...actualFeed])
+    } else {
+      const actualFeed = await fetchFeed(page)
 
-  const handleRefresh = () => {
-    setIsRefreshing(true)
-    setFeed([])
-    setPage(INITIAL_PAGE)
-    loadFeed()
+      setPage(prevState => prevState + 1)
+      setFeed(prevState => [...prevState, ...actualFeed])
+    }
+    setIsloading(false)
+    setIsRefreshing(false)
   }
 
   const handleSearch = async () => {
     if (inputSearchValue === '') {
-      handleRefresh()
-      return
+      loadFeed(true)
+    } else {
+      setIsRefreshing(true)
+      const filteredFeed = await fetchFeed()
+      setFeed([...filteredFeed])
+      setIsRefreshing(false)
     }
-
-    setIsRefreshing(true)
-    const filteredFeed = await fetchFeed()
-    setFeed([...filteredFeed])
-    setIsRefreshing(false)
   }
 
   const renderEmptyComponent = () => <>{isFilteredResults && <EmptyResult />}</>
@@ -102,13 +105,12 @@ const Feed = () => {
         rightComponent={<Icon name="user" size={28} />}
         backgroundColor={theme.primaryColor}
       />
-
       <FlatList
         data={feed}
         numColumns={2}
-        onEndReached={() => isFilteredResults || loadFeed()}
+        onEndReached={() => loadFeed(false)}
         onEndReachedThreshold={0.1}
-        onRefresh={handleRefresh}
+        onRefresh={() => loadFeed(true)}
         refreshing={isRefreshing}
         keyExtractor={item => String(item._id)}
         renderItem={({ item }) => <FeedItem item={item} />}

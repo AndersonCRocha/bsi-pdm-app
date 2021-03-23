@@ -1,5 +1,6 @@
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Text } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Card, CardContent, CardImage } from 'react-native-cards'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { cutText, formatCurrency } from '../../utils/utils'
@@ -31,7 +32,7 @@ const FeedItem = ({ item }) => {
         style={{ flex: 1 }}
       >
         <Card>
-          <CardImage source={produto} style={{ maxHeight: 100 }} />
+          <CardImage source={produto} />
           <CardContent flex={1}>
             <CompanyWrapper>
               <Avatar source={avatar} />

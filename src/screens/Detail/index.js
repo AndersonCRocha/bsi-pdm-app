@@ -7,6 +7,7 @@ import staticFeed from '../../assets/data/feed.json'
 import FeedItemDetail from '../../components/FeedItemDetail'
 import { ThemeContext } from 'styled-components'
 import { PageTitle } from './styles'
+import Share from '../../components/Share'
 
 const Detail = () => {
   const navigation = useNavigation()
@@ -38,6 +39,7 @@ const Detail = () => {
               />
             }
             centerComponent={<PageTitle>Detalhes do produto</PageTitle>}
+            rightComponent={<Share item={feedItem} />}
             backgroundColor={theme.primaryColor}
           />
           <FeedItemDetail item={feedItem} />

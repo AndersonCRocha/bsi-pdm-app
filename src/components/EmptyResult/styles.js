@@ -12,3 +12,19 @@ export const TextWrapper = styled.Text`
   margin-top: 24px;
   text-align: center;
 `
+
+export const GoToListButton = styled.TouchableOpacity`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #ccddff;
+  border-radius: 4px;
+`
+
+export const GoToListText = styled.Text`
+  font-size: 14px;
+  margin-left: 8px;
+`
